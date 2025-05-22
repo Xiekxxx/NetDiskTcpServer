@@ -1,0 +1,41 @@
+if (-1 == ret)          //未知错误
+        {
+            respdu->uiMsgType = ENUM_MSG_TYPE_ADD_FRIEND_RESPOND;
+            strcpy(respdu->caData, UNKONW_ERROR);
+            write((char*)respdu, respdu->uiPDULen);// 将回复PDU发送给客户端（write函数发送数据）
+            free(respdu);       // 释放内存（避免内存泄漏）
+            respdu = NULL;
+        }
+        else if (0 == ret)      //对方不在线
+        {
+            respdu = mkPDU(0);
+            respdu->uiMsgType = ENUM_MSG_TYPE_ADD_FRIEND_RESPOND;
+            strcpy(respdu->caData, ADD_FRIEND_OFFLINE);
+            write((char*)respdu, respdu->uiPDULen);// 将回复PDU发送给客户端（write函数发送数据）
+            free(respdu);       // 释放内存（避免内存泄漏）
+            respdu = NULL;
+        }
+        else if (1 == ret)      //对方在线
+        {
+            MyTcpServer::getInstance().resend(caPerName, pdu);
+
+        }
+        else if (2 == ret)      //双方已经是好友
+        {
+            respdu = mkPDU(0);
+            respdu->uiMsgType = ENUM_MSG_TYPE_ADD_FRIEND_RESPOND;
+            strcpy(respdu->caData, EXISTED_FRIEND);
+            write((char*)respdu, respdu->uiPDULen);// 将回复PDU发送给客户端（write函数发送数据）
+            free(respdu);       // 释放内存（避免内存泄漏）
+            respdu = NULL;
+        }
+        else if (3 == ret)      //对方不存在
+        {
+            respdu = mkPDU(0);
+            respdu->uiMsgType = ENUM_MSG_TYPE_ADD_FRIEND_RESPOND;
+            strcpy(respdu->caData, ADD_FRIEND_NO_EXIST);
+            write((char*)respdu, respdu->uiPDULen);// 将回复PDU发送给客户端（write函数发送数据）
+            free(respdu);       // 释放内存（避免内存泄漏）
+            respdu = NULL;
+        }
+        break;
