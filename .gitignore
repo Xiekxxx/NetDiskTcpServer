@@ -1,1 +1,11 @@
 -e "*.pro.user\n*.pro.user.*\nbuild-*/\n*.autosave" 
+# Qt生成文件
+*.pro.user
+*.autosave
+build-*/
+Debug/
+Release/
+
+# 系统文件
+.DS_Store
+Thumbs.db
